@@ -1,0 +1,11 @@
+<div class="wrapper-reset">
+
+  <form [formGroup]="resetForm" (ngSubmit)="updatePassword()">
+      <label>Password:</label>
+        <input type="text" formControlName="password">
+      <label>Password Confirmation:</label>
+        <input type="text" formControlName="passwordConfirmation">
+      <button type="submit" [disabled]="success">Save New Password</button>
+    </form>
+
+</div>
