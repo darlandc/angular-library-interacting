@@ -9,12 +9,10 @@ import { AuthService } from './auth.service';
 })
 export class AuthComponent implements OnInit {
 
-  public authForm: FormGroup;
-  authLevelOne: any;
-  userExists: boolean;
+  authForm: FormGroup;
+  userExists: boolean = false;
   passwordExpired: boolean;
-  @Input() status: string;
-  @Input() level: number;
+  status: string;
   state: number;
 
   constructor(
@@ -25,6 +23,7 @@ export class AuthComponent implements OnInit {
       username: new FormControl('', Validators.minLength[6]),
       password: new FormControl('', Validators.minLength[6]),
     });
+
   }
 
   ngOnInit(): void {
@@ -37,16 +36,13 @@ export class AuthComponent implements OnInit {
     // console.log(this.authForm.value);
     this.passwordExpired = true;
     this.service.changeState(2);
-    this.status = this.service.status;
+    this.service.checkUserExists(this.userExists);
+    return this.userExists;
   }
-
 
   resetFlow() {
     this.service.startFlow();
-    this.userExists = true; // info from back-end
     this.passwordExpired = false;
-    this.status = 'UNLOGGED';
   }
-
 
 }

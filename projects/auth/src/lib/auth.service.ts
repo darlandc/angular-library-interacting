@@ -9,26 +9,27 @@ export class AuthService {
   status: string;
   state: number;
 
-  constructor() { }
+  constructor() {}
 
   changeState(state: number) {
     this.initialState.next(state);
     switch (state) {
       case 0:
-        this.status = 'UNLOGGED';
+        status = 'UNLOGGED';
         break;
       case 1:
-        this.status = 'INVALID USERNAME!';
+        status = 'INVALID USERNAME!';
         break;
       case 2:
-        this.status = 'EXPIRED PASSWORD!';
+        status = 'EXPIRED PASSWORD!';
         break;
       case 3:
-        this.status = 'RESET PASSWORD SUCCESS!';
+        status = 'RESET PASSWORD SUCCESS!';
         break;
       default:
-        this.status = 'PROCESS FAILED!';
+        status = 'PROCESS FAILED!';
     }
+    return status;
   }
 
   startFlow() {
@@ -38,13 +39,12 @@ export class AuthService {
     // call the service and resolve $userExists
     checkUserExists(userExists) {
       // checking if user already exists in database'
-      if (userExists) {
+      if (!userExists) {
         this.changeState(1);
       } else {
-        this.changeState(0);
+        this.startFlow();
       }
     }
-
 
 
 }

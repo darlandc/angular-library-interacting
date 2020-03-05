@@ -12,17 +12,17 @@
 
 <div class="flow-password-expired" *ngIf="passwordExpired">
       <lib-reset
-      (checkStatus)="status=$event"
+      (returnForApplication)="status=$event"
       ></lib-reset>
 </div>
 
 <button (click)="resetFlow()">Back</button>
 
 <div class="footer">
-  <p>
+  <!-- <p>
     <label for="">status:</label>
     {{ status }}
-  </p>
+  </p> -->
   <p>
     <label for="">state:</label>
     {{ state }}

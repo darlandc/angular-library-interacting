@@ -9,14 +9,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class ResetComponent implements OnInit {
 
-  @Output() resetPassword = new EventEmitter();
-  @Output() checkStatus = new EventEmitter();
-
-  level: number;
+  state: number;
   status: string;
   success: boolean;
   resetForm: FormGroup;
-  state: number;
 
   constructor(
     private form: FormBuilder,
@@ -37,12 +33,9 @@ export class ResetComponent implements OnInit {
     this.success = true;  // info from back-end
     if (this.success) {
       this.service.changeState(3);
-      this.status = this.service.status;
     } else {
       this.service.changeState(0);
-      this.status = this.service.status;
     }
-    this.checkStatus.emit(this.status);
   }
 
 
