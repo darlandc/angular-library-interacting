@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'lib-auth',
@@ -14,77 +15,38 @@ export class AuthComponent implements OnInit {
   passwordExpired: boolean;
   @Input() status: string;
   @Input() level: number;
+  state: number;
 
-  constructor(private form: FormBuilder) {
-
+  constructor(
+    private form: FormBuilder,
+    private service: AuthService
+    ) {
     this.authForm = this.form.group ({
       username: new FormControl('', Validators.minLength[6]),
       password: new FormControl('', Validators.minLength[6]),
     });
-
-
   }
 
   ngOnInit(): void {
     // starting customer jorney
-    this.startFlow();
-  }
-
-  startFlow() {
-    this.userExists = true; // info from back-end
-    this.level = 0;
-    this.passwordExpired = false;
-    this.status = 'UNLOGGED';
-  }
-
-  // tslint:disable-next-line: use-lifecycle-interface
-  ngOnChanges(level) {
-    this.checkLevelStatus(level);
-    console.log(this.status);
+    this.resetFlow();
+    this.service.currentState.subscribe(state => this.state = state);
   }
 
   onSubmit() {
     // console.log(this.authForm.value);
-    if (this.level === 0) {
-      this.checkUserExists(this.userExists);
-    }
+    this.passwordExpired = true;
+    this.service.changeState(2);
+    this.status = this.service.status;
   }
 
-  checkLevelStatus(level) {
-    switch (level) {
-      case 0:
-        this.status = 'UNLOGGED';
-        break;
-      case 1:
-        this.status = 'INVALID USERNAME!';
-        break;
-      case 2:
-        this.status = 'EXPIRED PASSWORD!';
-        this.passwordExpired = true;
-        break;
-      case 999:
-        this.status = 'RESET PASSWORD SUCCESS!';
-        break;
-      default:
-        this.status = 'PROCESS FAILED!';
-        this.startFlow();
-    }
-  }
-
-  // call the service and resolve $userExists
-  checkUserExists(userExists) {
-    // checking if user already exists in database'
-    if (userExists) {
-      this.level = 2;
-      this.checkLevelStatus(this.level);
-    } else {
-      this.level = 1;
-      this.checkLevelStatus(this.level);
-    }
-  }
 
   resetFlow() {
-    this.startFlow();
+    this.service.startFlow();
+    this.userExists = true; // info from back-end
+    this.passwordExpired = false;
+    this.status = 'UNLOGGED';
   }
+
 
 }

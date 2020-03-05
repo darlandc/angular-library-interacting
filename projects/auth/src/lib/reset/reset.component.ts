@@ -1,3 +1,4 @@
+import { AuthService } from './../auth.service';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
@@ -15,8 +16,12 @@ export class ResetComponent implements OnInit {
   status: string;
   success: boolean;
   resetForm: FormGroup;
+  state: number;
 
-  constructor(private form: FormBuilder) {
+  constructor(
+    private form: FormBuilder,
+    private service: AuthService
+    ) {
     this.resetForm = this.form.group ({
       password: new FormControl('', Validators.minLength[6]),
       passwordConfirmation: new FormControl('', Validators.minLength[6]),
@@ -25,18 +30,18 @@ export class ResetComponent implements OnInit {
 
   ngOnInit(): void {
     this.success = false;
+    this.service.currentState.subscribe(state => this.state = state);
   }
 
   updatePassword() {
     this.success = true;  // info from back-end
     if (this.success) {
-      this.level = 999;
-      this.status = 'RESET PASSWORD SUCCESS!';
+      this.service.changeState(3);
+      this.status = this.service.status;
     } else {
-      this.level = 0;
-      this.status = 'RESET PASSWORD FAILED!';
+      this.service.changeState(0);
+      this.status = this.service.status;
     }
-    this.resetPassword.emit(this.level);
     this.checkStatus.emit(this.status);
   }
 

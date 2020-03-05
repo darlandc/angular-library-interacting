@@ -12,7 +12,6 @@
 
 <div class="flow-password-expired" *ngIf="passwordExpired">
       <lib-reset
-      (resetPassword)="level=$event"
       (checkStatus)="status=$event"
       ></lib-reset>
 </div>
@@ -21,13 +20,13 @@
 
 <div class="footer">
   <p>
-    <label for="">level:</label>
-    {{ level }}
-  </p>
-  <p>
     <label for="">status:</label>
     {{ status }}
   </p>
+  <p>
+    <label for="">state:</label>
+    {{ state }}
+  </p>
   <br>
-  <button (click)="ngOnChanges(level)">Check State</button>
+  <!-- <button (click)="ngOnChanges(level)">Check State</button> -->
 </div>
